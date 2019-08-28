@@ -1,0 +1,5 @@
+node_modules
+.idea
+contracts/compiled
+config/local
+config/keys.js
