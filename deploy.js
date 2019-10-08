@@ -13,8 +13,8 @@ function deploy(params, cb) {
     var {file, contract, net, keys, config} = params;
 
     var env = process.env.ENVIRONMENT || ''; if(env) env += "/";
-    config = config || require(`./config/${env}config.js`);
-    keys = keys || require(`./config/${env}keys.js`);
+    config = config || require(__dirname + `/config/${env}config.js`);
+    keys = keys || require(__dirname + `/config/${env}keys.js`);
 
     var web3 = new Web3(new Web3.providers.HttpProvider(config.web3.sidechain.rpc_url));
     web3.chainId = config.web3.sidechain.chain_id;
@@ -48,6 +48,10 @@ function deploy(params, cb) {
 
     console.log("deploy target".blue, target);
 
+
+    console.log("deploy file".red, file)
+
+    console.log("built".yellow, built);
 
     var compiled = built.contracts[file][target];
 
@@ -106,7 +110,13 @@ function deploy(params, cb) {
                 if(cb) cb(err, res);
             })
         }, 10000);*/
-        if(cb) cb(err, hash);
+        if(cb){
+          cb(err, {
+            response: err || hash,
+            contract: compiled,
+            build: built,
+          });
+        }
     })
 }
 
